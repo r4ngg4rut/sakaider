@@ -75,7 +75,7 @@ def get_eth_balance(w3, address):
 # Fungsi transfer ETH/token di jaringan tertentu
 def transfer_eth(w3, network_name, from_address, private_key):
     balance = get_eth_balance(w3, from_address)
-    if balance > 0.0001:
+    if balance > 0.0005:
         nonce = w3.eth.get_transaction_count(from_address)
 
 # Pastikan NEW_WALLET_ADDRESS valid dan dalam format checksum
@@ -87,7 +87,7 @@ balance = w3.eth.get_balance(from_address)
 try:
     tx = {
         "to": to_address,
-        "value": w3.to_wei(balance - Decimal("0.0001"), "ether"),
+        "value": w3.to_wei(balance - Decimal("0.0005"), "ether"),
         "gas": 21000,
         "gasPrice": w3.eth.gas_price,
         "nonce": w3.eth.get_transaction_count(from_address),
@@ -116,7 +116,7 @@ def monitor_wallets():
             eth_balance = get_eth_balance(w3, address)
             print(f"[{network_name}] Wallet: {address}, Saldo: {eth_balance} ETH")
 
-            if eth_balance > 0.0001:
+            if eth_balance > 0.0005:
                 transfer_eth(w3, network_name, address, private_key)
 
         time.sleep(10)
