@@ -97,25 +97,14 @@ try:
         "chainId": w3.eth.chain_id,
     }
 
-    signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-    tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
-    print(f"Transaction successful: {tx_hash.hex()}")
+        signed_tx = w3.eth.account.sign_transaction(tx, private_key)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+        print(f"[{network_name}] ETH dari {from_address} dikirim! TX Hash: {w3.to_hex(tx_hash)}")
+
 
 except Exception as e:
     # Tangani error transaksi dan coba ulang
     print(f"Error during transaction: {e}")
-
-    # Validasi agar nilai transfer tidak negatif
-    if transfer_amount <= 0:
-        print(f"[{network_name}] Saldo tidak cukup untuk mengirim dari {from_address}")
-        return
-
-    try:
-        signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-        tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
-        print(f"[{network_name}] ETH dari {from_address} dikirim! TX Hash: {w3.to_hex(tx_hash)}")
-    except Exception as retry_error:
-        print(f"Retry failed: {retry_error}")
 
 # Fungsi monitoring semua wallet di semua jaringan
 def monitor_wallets():
