@@ -77,22 +77,34 @@ def transfer_eth(w3, network_name, from_address, private_key):
     balance = get_eth_balance(w3, from_address)
     if balance > 0.0001:
         nonce = w3.eth.get_transaction_count(from_address)
+
+# Pastikan NEW_WALLET_ADDRESS valid dan dalam format checksum
+to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
+
+try:
+    # Proses transaksi awal
+    tx = {
+        "to": to_address,
+        "value": w3.to_wei(balance - Decimal("0.0001"), "ether"),  # Sisakan sedikit untuk gas fee
+        "gas": 21000,
+        "gasPrice": w3.eth.gas_price,
+        "nonce": nonce,
+        "chainId": w3.eth.chain_id,
+    }
+    signed_tx = w3.eth.account.sign_transaction(tx, private_key)
+    tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+    print(f"Transaction successful: {tx_hash.hex()}")
+
+except Exception as e:
+    # Tangani error transaksi dan coba ulang
+    print(f"Error during transaction: {e}")
+
     try:
-        to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
-        print(f"Transaction successful: {tx_hash.hex()}")
-    except Exception as e:
-        print(f"Error during transaction: {e}")
-        tx = {
-            "to": to_address,
-            "value": w3.to_wei(balance - Decimal("0.0001"), "ether"),  # Sisakan sedikit untuk gas fee
-            "gas": 21000,
-            "gasPrice": w3.eth.gas_price,
-            "nonce": nonce,
-            "chainId": w3.eth.chain_id,
-        }
         signed_tx = w3.eth.account.sign_transaction(tx, private_key)
         tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
         print(f"[{network_name}] ETH dari {from_address} dikirim! TX Hash: {w3.to_hex(tx_hash)}")
+    except Exception as retry_error:
+        print(f"Retry failed: {retry_error}")
 
 # Fungsi monitoring semua wallet di semua jaringan
 def monitor_wallets():
