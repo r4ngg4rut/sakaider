@@ -43,7 +43,7 @@ NETWORKS = {
     "Scroll test": os.getenv("SCROLLTEST_RPC"),
     "Swellchain": os.getenv("SWELLCHAIN_RPC"),
     "Swell test": os.getenv("SWELLTEST_RPC"),
-    "Unichain Sepo": os.getenv("UNICHAINSEPO_RPC),
+    "Unichain Sepo": os.getenv("UNICHAINSEPO_RPC"),
     "VANA": os.getenv("VANA_RPC"),
     "OKT": os.getenv("OKT_RPC"),
     "KCC": os.getenv("KCC_RPC"),
