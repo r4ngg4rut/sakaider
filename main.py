@@ -80,6 +80,7 @@ def transfer_eth(w3, network_name, from_address, private_key):
 
 # Pastikan NEW_WALLET_ADDRESS valid dan dalam format checksum
 to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
+from_address = account.address
 balance = w3.eth.get_balance(from_address)
 
 try:
