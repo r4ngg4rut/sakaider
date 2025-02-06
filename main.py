@@ -78,6 +78,9 @@ def transfer_eth(w3, network_name, from_address, private_key):
     if balance > 0.0001:
         nonce = w3.eth.get_transaction_count(from_address)
         to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
+        print(f"Transaction successful: {tx_hash.hex()}")
+    except Exception as e:
+        print(f"Error during transaction: {e}")
         tx = {
             "to": to_address,
             "value": w3.to_wei(balance - Decimal("0.0001"), "ether"),  # Sisakan sedikit untuk gas fee
