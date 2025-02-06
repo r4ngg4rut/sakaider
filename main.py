@@ -23,7 +23,7 @@ NETWORKS = {
     "Polygon Amoy": os.getenv("AMOY_RPC"),
     "Base Sepolia": os.getenv("BASESEPO_RPC"),
     "Blast": os.getenv("BLAST_RPC"),
-    "Optimism Sepolia": os.genenv("OPSEPO_RPC"),
+    "Optimism Sepolia": os.getenv("OPSEPO_RPC"),
     "ARB Sepolia": os.getenv("ARBSEPO"),
     "Palm": os.getenv("PALM_RPC"),
     "Palm test": os.getenv("PALMTEST_RPC"),
