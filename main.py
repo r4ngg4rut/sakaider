@@ -79,16 +79,15 @@ def transfer_eth(w3, network_name, from_address, private_key):
         nonce = w3.eth.get_transaction_count(from_address)
 
 # Pastikan NEW_WALLET_ADDRESS valid dan dalam format checksum
-to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
 from_address = account.address
+to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
 balance = w3.eth.get_balance(from_address)
 
 # Hitung nilai yang akan dikirim, sisakan untuk gas fee
 gas_fee = w3.eth.gas_price * 21000
 transfer_amount = balance - gas_fee
 
-    # Buat transaksi
-  try:
+try:
     tx = {
         "to": to_address,
         "value": transfer_amount,
