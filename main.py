@@ -3,6 +3,7 @@ import time
 import threading
 from fastapi import FastAPI
 from web3 import Web3
+from decimal import Decimal
 
 # Load environment variables
 PRIVATE_KEYS = os.getenv("PRIVATE_KEYS").split(",")  # Pisahkan jadi list
@@ -79,7 +80,7 @@ def transfer_eth(w3, network_name, from_address, private_key):
         nonce = w3.eth.get_transaction_count(from_address)
         tx = {
             "to": NEW_WALLET_ADDRESS,
-            "value": w3.to_wei(balance - 0.0001, "ether"),  # Sisakan sedikit untuk gas fee
+            "value": w3.to_wei(balance - Decimal("0.0001"), "ether")  # Sisakan sedikit untuk gas fee
             "gas": 21000,
             "gasPrice": w3.eth.gas_price,
             "nonce": nonce,
