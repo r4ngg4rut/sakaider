@@ -4,6 +4,7 @@ import threading
 from fastapi import FastAPI
 from web3 import Web3
 from decimal import Decimal
+from threading import Lock
 
 # Load environment variables
 PRIVATE_KEYS = os.getenv("PRIVATE_KEYS").split(",")  # Pisahkan jadi list
@@ -73,6 +74,7 @@ for private_key in PRIVATE_KEYS:
 
 app = FastAPI()
 drain_running = False  # Status monitoring
+drain_lock = Lock()
 
 # Fungsi cek saldo ETH/token di jaringan tertentu
 def get_eth_balance(w3, address):
