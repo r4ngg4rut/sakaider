@@ -88,7 +88,7 @@ def transfer_eth(w3, network_name, from_address, private_key):
             "chainId": w3.eth.chain_id,
         }
         signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-        tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
         print(f"[{network_name}] ETH dari {from_address} dikirim! TX Hash: {w3.to_hex(tx_hash)}")
 
 # Fungsi monitoring semua wallet di semua jaringan
