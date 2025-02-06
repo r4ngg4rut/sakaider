@@ -89,28 +89,28 @@ transfer_amount = balance - gas_fee
 
 try:
     # Buat transaksi
-  tx = {
-    "to": to_address,
-    "value": transfer_amount,
-    "gas": 21000,
-    "gasPrice": w3.eth.gas_price,
-    "nonce": w3.eth.get_transaction_count(from_address),
-    "chainId": w3.eth.chain_id,
+  try:
+    tx = {
+        "to": to_address,
+        "value": transfer_amount,
+        "gas": 21000,
+        "gasPrice": w3.eth.gas_price,
+        "nonce": w3.eth.get_transaction_count(from_address),
+        "chainId": w3.eth.chain_id,
     }
 
     signed_tx = w3.eth.account.sign_transaction(tx, private_key)
     tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
     print(f"Transaction successful: {tx_hash.hex()}")
 
-    except Exception as e:
-
+except Exception as e:
     # Tangani error transaksi dan coba ulang
     print(f"Error during transaction: {e}")
 
     # Validasi agar nilai transfer tidak negatif
     if transfer_amount <= 0:
-    print(f"[{network_name}] Saldo tidak cukup untuk mengirim dari {from_address}")
-    return
+        print(f"[{network_name}] Saldo tidak cukup untuk mengirim dari {from_address}")
+        return
 
     try:
         signed_tx = w3.eth.account.sign_transaction(tx, private_key)
