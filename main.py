@@ -77,6 +77,7 @@ def transfer_eth(w3, network_name, from_address, private_key):
     balance = get_eth_balance(w3, from_address)
     if balance > 0.0001:
         nonce = w3.eth.get_transaction_count(from_address)
+    try:
         to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
         print(f"Transaction successful: {tx_hash.hex()}")
     except Exception as e:
