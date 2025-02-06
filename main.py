@@ -18,7 +18,7 @@ NETWORKS = {
     "Optimism": os.getenv("OPTIMISM_RPC"),
     "ETH Sepolia": os.getenv("ETHSEPOLIA_RPC"),
     "ETH Holesky": os.getenv("ETHHOLESKY_RPC"),
-    "Linea": os.getenv("LINEA_RPC")
+    "Linea": os.getenv("LINEA_RPC"),
     "Linea Sepolia": os.getenv("LINEASEPO_RPC"),
     "Polygon Amoy": os.getenv("AMOY_RPC"),
     "Base Sepolia": os.getenv("BASESEPO_RPC"),
@@ -38,12 +38,15 @@ NETWORKS = {
     "Mantle": os.getenv("MANTLE_RPC"),
     "Mantle Sepo": os.getenv("MANTLESEPO_RPC"),
     "opBNB": os.getenv("opBNB_RPC"),
-    "opBNB Test": os.getenv("opBNBTEST_RPC")
+    "opBNB Test": os.getenv("opBNBTEST_RPC"),
     "Scroll": os.getenv("SCROLL_RPC"),
     "Scroll test": os.getenv("SCROLLTEST_RPC"),
     "Swellchain": os.getenv("SWELLCHAIN_RPC"),
     "Swell test": os.getenv("SWELLTEST_RPC"),
     "Unichain Sepo": os.getenv("UNICHAINSEPO_RPC),
+    "VANA": os.getenv("VANA_RPC"),
+    "OKT": os.getenv("OKT_RPC"),
+    "KCC": os.getenv("KCC_RPC"),
 }
 
 # Inisialisasi Web3 untuk semua jaringan dan wallet
