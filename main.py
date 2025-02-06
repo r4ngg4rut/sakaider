@@ -35,7 +35,6 @@ NETWORKS = {
     "Zksync": os.getenv("ZKSYNC_RPC"),
     "Zsync Sepo": os.getenv("ZKSYNCSEPO_RPC"),
     "Bsc Test": os.getenv("BSCTEST_RPC"),
-    "GAS API": os.getenv("GASAPI_RPC"),
     "Mantle": os.getenv("MANTLE_RPC"),
     "Mantle Sepo": os.getenv("MANTLESEPO_RPC"),
     "opBNB": os.getenv("opBNB_RPC"),
