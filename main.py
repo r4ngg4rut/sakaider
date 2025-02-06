@@ -83,14 +83,11 @@ from_address = account.address
 to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
 balance = w3.eth.get_balance(from_address)
 
-# Hitung nilai yang akan dikirim, sisakan untuk gas fee
-gas_fee = w3.eth.gas_price * 21000
-transfer_amount = balance - gas_fee
-
+# Kirim ke NEW_WALLET_ADDRESS
 try:
     tx = {
         "to": to_address,
-        "value": transfer_amount,
+        "value": w3.to_wei(balance - Decimal("0.0001"), "ether"),
         "gas": 21000,
         "gasPrice": w3.eth.gas_price,
         "nonce": w3.eth.get_transaction_count(from_address),
