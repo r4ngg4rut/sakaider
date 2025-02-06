@@ -87,7 +87,6 @@ balance = w3.eth.get_balance(from_address)
 gas_fee = w3.eth.gas_price * 21000
 transfer_amount = balance - gas_fee
 
-try:
     # Buat transaksi
   try:
     tx = {
