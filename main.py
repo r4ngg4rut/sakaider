@@ -78,8 +78,9 @@ def transfer_eth(w3, network_name, from_address, private_key):
     balance = get_eth_balance(w3, from_address)
     if balance > 0.0001:
         nonce = w3.eth.get_transaction_count(from_address)
+        to_address = Web3.to_checksum_address(NEW_WALLET_ADDRESS)
         tx = {
-            "to": NEW_WALLET_ADDRESS,
+            "to": to_address,
             "value": w3.to_wei(balance - Decimal("0.0001"), "ether"),  # Sisakan sedikit untuk gas fee
             "gas": 21000,
             "gasPrice": w3.eth.gas_price,
